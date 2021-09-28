@@ -1,0 +1,75 @@
+preprocess:
+  cmd: python -m spacy run preprocess
+  script:
+    - python scripts/preprocess.py assets/stackoverflow-train.jsonl corpus/stackoverflow-train.spacy
+    - python scripts/preprocess.py assets/stackoverflow-valid.jsonl corpus/stackoverflow-valid.spacy
+  deps:
+    - path: assets/stackoverflow-train.jsonl
+      md5: b16fe937d36d678edc680127601fd898
+    - path: assets/stackoverflow-valid.jsonl
+      md5: 828c916aa5e5cf7c3917edf8b930d11e
+    - path: scripts/preprocess.py
+      md5: c1b6ad0e6e5ad7102a6d3fb0de7a4101
+  outs:
+    - path: corpus/stackoverflow-train.spacy
+      md5: f33953e60a281ade21b015f1aee084c8
+    - path: corpus/stackoverflow-valid.spacy
+      md5: 82d0a3df15dba4ae72e2458b9876a40d
+  spacy_version: 3.1.2
+  spacy_git_version: e1f88de72
+patternmod:
+  cmd: python -m spacy run patternmod
+  script:
+    - python scripts/save_pattern_model.py configs/patterns.jsonl training/model-pattern
+  deps:
+    - path: configs/patterns.jsonl
+      md5: 79a89d647d756e80c05fd5922b5e38c4
+  outs:
+    - path: training/model-pattern
+      md5: 8882754f28cf0e96fe670d3c58b191a9
+  spacy_version: 3.1.2
+  spacy_git_version: e1f88de72
+train:
+  cmd: python -m spacy run train
+  script:
+    - python -m spacy train configs/config.cfg --output training/ --paths.train corpus/stackoverflow-train.spacy
+      --paths.dev corpus/stackoverflow-valid.spacy
+  deps:
+    - path: corpus/stackoverflow-train.spacy
+      md5: f33953e60a281ade21b015f1aee084c8
+    - path: corpus/stackoverflow-valid.spacy
+      md5: 82d0a3df15dba4ae72e2458b9876a40d
+  outs:
+    - path: training/model-best
+      md5: 1a3a16202f6b0c2ba48666db03962bc3
+  spacy_version: 3.1.2
+  spacy_git_version: e1f88de72
+evaluate:
+  cmd: python -m spacy run evaluate
+  script:
+    - python -m spacy evaluate training/model-best corpus/stackoverflow-valid.spacy
+      --output training/model-metrics.json
+    - python -m spacy evaluate training/model-pattern corpus/stackoverflow-valid.spacy
+      --output training/pattern-metrics.json
+  deps:
+    - path: corpus/stackoverflow-valid.spacy
+      md5: 82d0a3df15dba4ae72e2458b9876a40d
+    - path: training/model-best
+      md5: 1a3a16202f6b0c2ba48666db03962bc3
+  outs:
+    - path: training/metrics.json
+      md5: 21443d5d07bd2379ca39cc5acbb66145
+  spacy_version: 3.1.2
+  spacy_git_version: e1f88de72
+show-stats:
+  cmd: python -m spacy run show-stats
+  script:
+    - python scripts/print_stats.py
+  deps:
+    - path: training/model-metrics.json
+      md5: 79433d8d6da2cb70c8a9c2036cd53e26
+    - path: training/pattern-metrics.json
+      md5: 3f4b742b818a514440cfb8a031f76035
+  outs: []
+  spacy_version: 3.1.2
+  spacy_git_version: e1f88de72
