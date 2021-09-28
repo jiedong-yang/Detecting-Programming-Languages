@@ -2,9 +2,7 @@
 
 # 🪐 spaCy Project: Detecting programming language in StackOverflow (Named Entity Recognition)
 
-This project uses [Dataset](https://www.kaggle.com/stackoverflow/stacksample). This is a learning project, I walked thr
-ough the [tutorial](https://www.youtube.com/watch?v=WnGPv6HnBok&list=PLBmcuObd5An559HbDr_alBnwVsGq-7uTF&index=1) here t
-o practice with spaCy. Awesome tutorial, definitly will do some fun NER projects in the future!
+[Dataset](https://www.kaggle.com/stackoverflow/stacksample). This is a learning project, I learned through the [tutorial](https://www.youtube.com/watch?v=WnGPv6HnBok&list=PLBmcuObd5An559HbDr_alBnwVsGq-7uTF&index=1) here to practice with spaCy. Awesome tutorial, definitly will do some fun NER projects in the future!
 
 ## �📋 project.yml
 
